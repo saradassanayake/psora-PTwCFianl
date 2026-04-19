@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Psora — Viewer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Instrument+Serif:ital@0;1&display=swap');
+
+    :root {
+      --bg: #FAF7F2;
+      --text: #2C2826;
+      --accent: #D4726A;
+      --accent-soft: #E8A49E;
+      --canvas-bg: #FFFFFF;
+      --border: #E0D8CF;
+      --muted: #9A918A;
+      --card-bg: #FFFFFF;
+      --level-1: #7EC47E;
+      --level-2: #B5CC5A;
+      --level-3: #E4C84A;
+      --level-4: #E4944A;
+      --level-5: #D4726A;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 32px 48px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 32px;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span { color: var(--accent); }
+
+    .connection-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    .connection-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: background 0.4s ease;
+    }
+
+    .connection-dot.active {
+      background: #7EC47E;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .subtitle {
+      padding: 6px 48px 0;
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    main {
+      flex: 1;
+      padding: 32px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.03);
+    }
+
+    .card-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .coverage-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring-container {
+      position: relative;
+      width: 220px;
+      height: 220px;
+    }
+
+    .ring-container svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg { fill: none; stroke: var(--border); stroke-width: 8; }
+
+    .ring-fill {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 628.32;
+      stroke-dashoffset: 628.32;
+      transition: stroke-dashoffset 0.6s ease, stroke 0.4s ease;
+    }
+
+    .ring-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring-pct {
+      font-family: 'Instrument Serif', serif;
+      font-size: 56px;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .ring-pct-sign { font-size: 28px; color: var(--muted); }
+    .ring-sub { font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 300; }
+
+    .stress-card { display: flex; flex-direction: column; }
+
+    .stress-number {
+      font-family: 'Instrument Serif', serif;
+      font-size: 96px;
+      line-height: 1;
+      text-align: center;
+      margin: auto 0;
+      transition: color 0.4s ease;
+      color: var(--muted);
+    }
+
+    .stress-label-text {
+      font-size: 15px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 300;
+      min-height: 20px;
+    }
+
+    .stress-bar-track { display: flex; gap: 6px; margin-top: 20px; }
+
+    .stress-bar-segment {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border);
+      transition: background 0.4s ease;
+    }
+
+    .preview-card {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .preview-image-wrap {
+      width: 280px;
+      height: 280px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-image-wrap img { width: 100%; height: 100%; object-fit: contain; }
+
+    .preview-placeholder {
+      color: var(--border);
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    .preview-details { flex: 1; }
+
+    .preview-details h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 28px;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+
+    .preview-details p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 300;
+      max-width: 440px;
+    }
+
+    .last-update {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--border);
+      font-weight: 400;
+    }
+
+    .waiting-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: opacity 0.5s ease;
+    }
+
+    .waiting-overlay.hidden { opacity: 0; pointer-events: none; }
+
+    .waiting-text {
+      font-family: 'Instrument Serif', serif;
+      font-size: 24px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .waiting-sub {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .waiting-dots::after {
+      content: '';
+      animation: dots 1.5s steps(4, end) infinite;
+    }
+
+    @keyframes dots {
+      0% { content: ''; }
+      25% { content: '.'; }
+      50% { content: '..'; }
+      75% { content: '...'; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="waiting-overlay" id="waitingOverlay">
+    <div class="waiting-text">Waiting for input<span class="waiting-dots"></span></div>
+    <div class="waiting-sub">Open the drawing page on another device</div>
+  </div>
+
+  <header>
+    <div class="logo">p<span>s</span>ora</div>
+    <div class="connection-status">
+      <div class="connection-dot" id="connDot"></div>
+      <span id="connText">waiting</span>
+    </div>
+  </header>
+  <p class="subtitle">live stress mapping</p>
+
+  <main>
+    <div class="card coverage-card">
+      <div class="card-label">Coverage</div>
+      <div class="ring-container">
+        <svg viewBox="0 0 220 220">
+          <circle class="ring-bg" cx="110" cy="110" r="100" />
+          <circle class="ring-fill" id="ringFill" cx="110" cy="110" r="100" />
+        </svg>
+        <div class="ring-label">
+          <div class="ring-pct"><span id="pctNum">0</span><span class="ring-pct-sign">%</span></div>
+          <div class="ring-sub">of surface</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card stress-card">
+      <div class="card-label">Stress Level</div>
+      <div class="stress-number" id="stressNum">—</div>
+      <div class="stress-label-text" id="stressLabel"></div>
+      <div class="stress-bar-track" id="stressBar">
+        <div class="stress-bar-segment" data-level="1"></div>
+        <div class="stress-bar-segment" data-level="2"></div>
+        <div class="stress-bar-segment" data-level="3"></div>
+        <div class="stress-bar-segment" data-level="4"></div>
+        <div class="stress-bar-segment" data-level="5"></div>
+      </div>
+    </div>
+
+    <div class="card preview-card">
+      <div class="preview-image-wrap" id="previewWrap">
+        <span class="preview-placeholder">no drawing yet</span>
+      </div>
+      <div class="preview-details">
+        <h2>Live Canvas</h2>
+        <p>
+          As the user draws areas affected by psoriasis, coverage translates
+          into a stress level from 1 to 5. Greater surface coverage suggests higher
+          stress-related flare intensity, which informs how daily tasks are
+          reprioritized.
+        </p>
+        <div class="last-update" id="lastUpdate"></div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    /* ── FIREBASE ── */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDtbPICrsVz5mBs7XIuGdGJ4WqELORQElk",
+      authDomain: "psora-9110d.firebaseapp.com",
+      databaseURL: "https://psora-9110d-default-rtdb.firebaseio.com",
+      projectId: "psora-9110d",
+      storageBucket: "psora-9110d.firebasestorage.app",
+      messagingSenderId: "671697488457",
+      appId: "1:671697488457:web:875c8978b37473782acd98",
+      measurementId: "G-MYWGV7MS1S"
+    };
+
+    const appFb = initializeApp(firebaseConfig);
+    const db = getDatabase(appFb);
+    const canvasRef = ref(db, 'psora/canvas');
+
+    /* ── ELEMENTS ── */
+    const pctNum = document.getElementById('pctNum');
+    const ringFill = document.getElementById('ringFill');
+    const stressNum = document.getElementById('stressNum');
+    const stressLabel = document.getElementById('stressLabel');
+    const stressBar = document.getElementById('stressBar');
+    const previewWrap = document.getElementById('previewWrap');
+    const connDot = document.getElementById('connDot');
+    const connText = document.getElementById('connText');
+    const waitingOverlay = document.getElementById('waitingOverlay');
+    const lastUpdateEl = document.getElementById('lastUpdate');
+
+    const CIRCUMFERENCE = 2 * Math.PI * 100;
+
+    const stressLabels = { 0:'', 1:'Minimal', 2:'Mild', 3:'Moderate', 4:'High', 5:'Severe' };
+    const stressColors = {
+      0:'var(--muted)', 1:'var(--level-1)', 2:'var(--level-2)',
+      3:'var(--level-3)', 4:'var(--level-4)', 5:'var(--level-5)'
+    };
+
+    let firstDataReceived = false;
+
+    function update(data) {
+      if (!data) return;
+
+      if (!firstDataReceived) {
+        firstDataReceived = true;
+        waitingOverlay.classList.add('hidden');
+        connDot.classList.add('active');
+        connText.textContent = 'connected';
+      }
+
+      const pct = data.percentage || 0;
+      pctNum.textContent = pct.toFixed(1);
+      const offset = CIRCUMFERENCE - (CIRCUMFERENCE * Math.min(pct, 100) / 100);
+      ringFill.style.strokeDashoffset = offset;
+
+      const level = data.stressLevel || 0;
+      stressNum.textContent = level === 0 ? '—' : level;
+      stressNum.style.color = stressColors[level];
+      stressLabel.textContent = stressLabels[level];
+      ringFill.style.stroke = stressColors[Math.max(level, 1)];
+
+      stressBar.querySelectorAll('.stress-bar-segment').forEach(seg => {
+        const segLevel = parseInt(seg.dataset.level);
+        seg.style.background = segLevel <= level ? stressColors[segLevel] : 'var(--border)';
+      });
+
+      if (data.thumbnail) {
+        previewWrap.innerHTML = `<img src="${data.thumbnail}" alt="Drawing preview">`;
+      } else {
+        previewWrap.innerHTML = `<span class="preview-placeholder">canvas cleared</span>`;
+      }
+
+      if (data.timestamp) {
+        const t = new Date(data.timestamp);
+        lastUpdateEl.textContent = `Last update: ${t.toLocaleTimeString()}`;
+      }
+    }
+
+    /* ── LISTEN FOR CHANGES ── */
+    onValue(canvasRef, (snapshot) => {
+      update(snapshot.val());
+    });
+  </script>
+</body>
+</html>
