@@ -10,12 +10,9 @@ firebase.initializeApp({
 });
 let dbRef = firebase.database().ref("psora/canvas");
 
-const PAGE_W = 1440;
-const PAGE_H = 1024;
 const SVG_W = 411;
 const SVG_H = 640;
-const SVG_X = 632;
-const SVG_Y = 202;
+let SVG_X, SVG_Y;
 
 let drawColor = [240, 84, 35, 100];
 let lastPrinted = 0;
@@ -30,8 +27,10 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(PAGE_W, PAGE_H);
+  createCanvas(windowWidth, windowHeight);
   background(255);
+  SVG_X = (windowWidth - SVG_W) / 2;
+  SVG_Y = (windowHeight - SVG_H) / 2;
 
   let svgString = bodyLines.join("\n");
   let blob = new Blob([svgString], { type: "image/svg+xml" });
