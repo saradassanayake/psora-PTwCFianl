@@ -41,49 +41,7 @@
       align-items: center;
     }
 
-    .logo {
-      font-family: 'Instrument Serif', serif;
-      font-size: 32px;
-      letter-spacing: -0.5px;
-    }
-
-    .logo span { color: var(--accent); }
-
-    .connection-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 500;
-      letter-spacing: 0.3px;
-    }
-
-    .connection-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--muted);
-      transition: background 0.4s ease;
-    }
-
-    .connection-dot.active {
-      background: #7EC47E;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    .subtitle {
-      padding: 6px 48px 0;
-      font-size: 14px;
-      color: var(--muted);
-      font-style: italic;
-      font-weight: 300;
-    }
+    .logo img { display: block; height: 40px; width: auto; }
 
     main {
       flex: 1;
@@ -120,48 +78,16 @@
       justify-content: center;
     }
 
-    .ring-container {
-      position: relative;
-      width: 220px;
-      height: 220px;
-    }
-
-    .ring-container svg {
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg);
-    }
-
-    .ring-bg { fill: none; stroke: var(--border); stroke-width: 8; }
-
-    .ring-fill {
-      fill: none;
-      stroke: var(--accent);
-      stroke-width: 8;
-      stroke-linecap: round;
-      stroke-dasharray: 628.32;
-      stroke-dashoffset: 628.32;
-      transition: stroke-dashoffset 0.6s ease, stroke 0.4s ease;
-    }
-
-    .ring-label {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .ring-pct {
+    .coverage-number {
       font-family: 'Instrument Serif', serif;
-      font-size: 56px;
+      font-size: 96px;
       line-height: 1;
       color: var(--text);
+      text-align: center;
+      margin: auto 0;
     }
 
-    .ring-pct-sign { font-size: 28px; color: var(--muted); }
-    .ring-sub { font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 300; }
+    .coverage-number span { font-size: 48px; color: var(--muted); }
 
     .stress-card { display: flex; flex-direction: column; }
 
@@ -293,27 +219,13 @@
   </div>
 
   <header>
-    <div class="logo">p<span>s</span>ora</div>
-    <div class="connection-status">
-      <div class="connection-dot" id="connDot"></div>
-      <span id="connText">waiting</span>
-    </div>
+    <div class="logo"><svg width="24" height="34" viewBox="0 0 24 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.000619141 0.00469417L8.12078 0.0012212L11.1564 1.78123e-05C13.9005 -0.00152958 15.8581 0.0946492 18.3255 1.5067C19.2469 2.02696 20.0935 2.66996 20.8419 3.41803C22.9022 5.46534 23.8146 8.03902 23.8614 10.9047C23.8694 11.3947 23.8004 11.8466 23.7592 12.3266C23.3104 17.5587 19.8216 20.9222 14.7986 21.9255C13.989 22.0847 13.6782 22.0816 12.8586 22.0805C10.6546 22.0808 8.48582 21.5276 6.55128 20.4715C6.15198 20.255 5.76352 20.019 5.38719 19.7646C5.16997 19.6208 4.80857 19.3529 4.58509 19.2621C5.39658 20.7267 6.35218 22.2928 7.21002 23.742L10.6341 29.5792L12.0465 31.9793C12.2831 32.3792 12.7571 33.1422 12.9147 33.5483C11.3914 33.6013 9.67924 33.5641 8.14361 33.5641L0 33.5638L0.000619141 0.00469417Z" fill="black"/><path d="M4.5869 19.2621C3.09147 17.3787 2.18927 15.43 4.46218 13.6652C6.23061 12.2922 8.43357 11.7048 10.5894 11.2707C11.1367 11.1633 11.8883 11.1001 12.3659 10.9941C12.9045 13.5766 13.4736 16.1527 14.0731 18.7217L14.6049 21.0677C14.6509 21.2772 14.7733 21.7329 14.8004 21.9255C13.9908 22.0847 13.68 22.0816 12.8605 22.0805C10.6565 22.0808 8.48763 21.5276 6.55308 20.4715C6.15379 20.255 5.76532 20.019 5.389 19.7646C5.17178 19.6208 4.81038 19.3529 4.5869 19.2621Z" fill="#F15424"/></svg></div>
   </header>
-  <p class="subtitle">live stress mapping</p>
 
   <main>
     <div class="card coverage-card">
       <div class="card-label">Coverage</div>
-      <div class="ring-container">
-        <svg viewBox="0 0 220 220">
-          <circle class="ring-bg" cx="110" cy="110" r="100" />
-          <circle class="ring-fill" id="ringFill" cx="110" cy="110" r="100" />
-        </svg>
-        <div class="ring-label">
-          <div class="ring-pct"><span id="pctNum">0</span><span class="ring-pct-sign">%</span></div>
-          <div class="ring-sub">of surface</div>
-        </div>
-      </div>
+      <div class="coverage-number"><span id="pctNum">0</span><span>%</span></div>
     </div>
 
     <div class="card stress-card">
@@ -368,17 +280,12 @@
 
     /* ── ELEMENTS ── */
     const pctNum = document.getElementById('pctNum');
-    const ringFill = document.getElementById('ringFill');
     const stressNum = document.getElementById('stressNum');
     const stressLabel = document.getElementById('stressLabel');
     const stressBar = document.getElementById('stressBar');
     const previewWrap = document.getElementById('previewWrap');
-    const connDot = document.getElementById('connDot');
-    const connText = document.getElementById('connText');
     const waitingOverlay = document.getElementById('waitingOverlay');
     const lastUpdateEl = document.getElementById('lastUpdate');
-
-    const CIRCUMFERENCE = 2 * Math.PI * 100;
 
     const stressLabels = { 0:'', 1:'Minimal', 2:'Mild', 3:'Moderate', 4:'High', 5:'Severe' };
     const stressColors = {
@@ -394,20 +301,15 @@
       if (!firstDataReceived) {
         firstDataReceived = true;
         waitingOverlay.classList.add('hidden');
-        connDot.classList.add('active');
-        connText.textContent = 'connected';
       }
 
       const pct = data.percentage || 0;
       pctNum.textContent = pct.toFixed(1);
-      const offset = CIRCUMFERENCE - (CIRCUMFERENCE * Math.min(pct, 100) / 100);
-      ringFill.style.strokeDashoffset = offset;
 
       const level = data.stressLevel || 0;
       stressNum.textContent = level === 0 ? '—' : level;
       stressNum.style.color = stressColors[level];
       stressLabel.textContent = stressLabels[level];
-      ringFill.style.stroke = stressColors[Math.max(level, 1)];
 
       stressBar.querySelectorAll('.stress-bar-segment').forEach(seg => {
         const segLevel = parseInt(seg.dataset.level);
