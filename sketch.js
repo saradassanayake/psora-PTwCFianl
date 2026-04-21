@@ -10,56 +10,63 @@ firebase.initializeApp({
 });
 let dbRef = firebase.database().ref("psora/canvas");
 
+const PAGE_W = 1440;
+const PAGE_H = 1024;
+const SVG_W = 411;
+const SVG_H = 640;
+const SVG_X = (PAGE_W - SVG_W) / 2; // 514.5
+const SVG_Y = (PAGE_H - SVG_H) / 2; // 192
+
 let drawColor = [240, 84, 35, 100];
 let lastPrinted = 0;
 let lastBroadcast = 0;
 let bodyImg;
-let bodyLines;
 let drawLayer;
 let clearBtn, confirmBtn;
 
 function preload() {
-  bodyLines = loadStrings("drawing1.txt");
+  bodyImg = loadImage("psora-head-svg.svg");
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(PAGE_W, PAGE_H);
   background(255);
 
-  let svgString = bodyLines.join("\n");
-  let blob = new Blob([svgString], { type: "image/svg+xml" });
-  let url = URL.createObjectURL(blob);
-  bodyImg = loadImage(url);
-
-  drawLayer = createGraphics(width, height);
+  drawLayer = createGraphics(SVG_W, SVG_H);
   drawLayer.clear();
 
   clearBtn = createButton("Clear");
-  clearBtn.position(width - 280, height - 70);
+  clearBtn.position(PAGE_W - 280, PAGE_H - 70);
   styleButton(clearBtn, "#fff", "#F05423");
   clearBtn.mousePressed(clearCanvas);
 
   confirmBtn = createButton("Confirm");
-  confirmBtn.position(width - 160, height - 70);
+  confirmBtn.position(PAGE_W - 160, PAGE_H - 70);
   styleButton(confirmBtn, "#F05423", "#fff");
   confirmBtn.mousePressed(confirmDrawing);
 }
 
 function draw() {
   background(255);
-  drawBody();
-  image(drawLayer, 0, 0);
+  image(drawLayer, SVG_X, SVG_Y);
+  if (bodyImg && bodyImg.width > 0) {
+    image(bodyImg, SVG_X, SVG_Y, SVG_W, SVG_H);
+  }
 
   if (mouseIsPressed) {
-    if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
+    let lx = pmouseX - SVG_X;
+    let ly = pmouseY - SVG_Y;
+    let mx = mouseX - SVG_X;
+    let my = mouseY - SVG_Y;
+    if (mx >= 0 && mx <= SVG_W && my >= 0 && my <= SVG_H) {
       drawLayer.noStroke();
       drawLayer.fill(drawColor);
-      let d = dist(pmouseX, pmouseY, mouseX, mouseY);
+      let d = dist(lx, ly, mx, my);
       let steps = max(1, ceil(d / 3));
       for (let i = 0; i <= steps; i++) {
         let t = i / steps;
-        let x = lerp(pmouseX, mouseX, t);
-        let y = lerp(pmouseY, mouseY, t);
+        let x = lerp(lx, mx, t);
+        let y = lerp(ly, my, t);
         drawLayer.ellipse(x, y, 20, 20);
       }
     }
@@ -68,19 +75,10 @@ function draw() {
   checkFill();
 }
 
-function drawBody() {
-  if (bodyImg && bodyImg.width > 0) {
-    let s = max(width / 1440, height / 1024);
-    let w = 1440 * s;
-    let h = 1024 * s;
-    image(bodyImg, (width - w) / 2, (height - h) / 2, w, h);
-  }
-}
-
 function checkFill() {
   drawLayer.loadPixels();
   let filled = 0;
-  let total = width * height;
+  let total = SVG_W * SVG_H;
   for (let i = 3; i < drawLayer.pixels.length; i += 4) {
     if (drawLayer.pixels[i] > 10) filled++;
   }
@@ -91,7 +89,6 @@ function checkFill() {
     lastPrinted = rounded;
   }
 
-  // only broadcast every 200ms
   if (millis() - lastBroadcast > 200) {
     lastBroadcast = millis();
     let level = min(5, max(1, ceil(pct / 6)));
@@ -120,7 +117,7 @@ function clearCanvas() {
 function confirmDrawing() {
   drawLayer.loadPixels();
   let filled = 0;
-  let total = width * height;
+  let total = SVG_W * SVG_H;
   for (let i = 3; i < drawLayer.pixels.length; i += 4) {
     if (drawLayer.pixels[i] > 10) filled++;
   }
