@@ -1,5 +1,18 @@
+/* firebase */
+firebase.initializeApp({
+  apiKey: "AIzaSyDtbPICrsVz5mBs7XIuGdGJ4WqELORQElk",
+  authDomain: "psora-9110d.firebaseapp.com",
+  databaseURL: "https://psora-9110d-default-rtdb.firebaseio.com",
+  projectId: "psora-9110d",
+  storageBucket: "psora-9110d.firebasestorage.app",
+  messagingSenderId: "671697488457",
+  appId: "1:671697488457:web:875c8978b37473782acd98"
+});
+let dbRef = firebase.database().ref("psora/canvas");
+
 let drawColor = [240, 84, 35, 100];
 let lastPrinted = 0;
+let lastBroadcast = 0;
 let bodyImg;
 let bodyLines;
 let drawLayer;
@@ -77,12 +90,31 @@ function checkFill() {
     print(rounded + "%");
     lastPrinted = rounded;
   }
+
+  // only broadcast every 200ms
+  if (millis() - lastBroadcast > 200) {
+    lastBroadcast = millis();
+    let level = min(5, max(1, ceil(pct / 6)));
+    if (pct < 0.5) level = 0;
+    dbRef.set({
+      percentage: pct,
+      stressLevel: level,
+      timestamp: Date.now(),
+      thumbnail: document.querySelector("canvas").toDataURL("image/jpeg", 0.3),
+    });
+  }
 }
 
 function clearCanvas() {
   drawLayer.clear();
   lastPrinted = 0;
   print("Canvas cleared");
+  dbRef.set({
+    percentage: 0,
+    stressLevel: 0,
+    timestamp: Date.now(),
+    thumbnail: null,
+  });
 }
 
 function confirmDrawing() {
@@ -96,6 +128,14 @@ function confirmDrawing() {
   let level = min(5, max(1, ceil(pct / 6)));
   if (pct < 0.5) level = 0;
   print("Confirmed — " + nf(pct, 1, 1) + "% covered, stress level: " + level);
+
+  dbRef.set({
+    percentage: pct,
+    stressLevel: level,
+    timestamp: Date.now(),
+    thumbnail: document.querySelector("canvas").toDataURL("image/jpeg", 0.3),
+    confirmed: true,
+  });
 
   confirmBtn.html("Sent!");
   confirmBtn.style("opacity", "0.6");
