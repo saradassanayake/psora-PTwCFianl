@@ -28,9 +28,7 @@ let slide6Line2 = "Patient-centered technology that acknowledges this cycle can 
 // ─── SETUP ───────────────────────────────────────────────────
 function setup() {
   let cnv = createCanvas(windowWidth, windowHeight);
-  if (document.getElementById('slideshow-overlay')) {
-    cnv.parent('slideshow-overlay');
-  }
+  cnv.id('slideshow-canvas');
   slideStartTime = millis();
 }
 

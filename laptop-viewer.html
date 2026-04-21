@@ -171,17 +171,12 @@
       font-weight: 400;
     }
 
-    #slideshow-overlay {
-      position: fixed;
-      inset: 0;
+    #slideshow-canvas {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
       z-index: 200;
-      background: #fff;
       transition: opacity 0.8s ease;
-    }
-
-    #slideshow-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
     }
 
     .waiting-overlay {
@@ -225,8 +220,6 @@
   </style>
 </head>
 <body>
-
-  <div id="slideshow-overlay"></div>
 
   <div class="waiting-overlay" id="waitingOverlay">
     <div class="waiting-text">Waiting for input<span class="waiting-dots"></span></div>
@@ -277,9 +270,11 @@
   <script src="sketch1.js"></script>
   <script>
     function showViewer() {
-      const overlay = document.getElementById('slideshow-overlay');
-      overlay.classList.add('hidden');
-      setTimeout(() => overlay.remove(), 800);
+      const cnv = document.getElementById('slideshow-canvas');
+      if (cnv) {
+        cnv.style.opacity = '0';
+        setTimeout(() => cnv.remove(), 800);
+      }
     }
   </script>
 
