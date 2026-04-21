@@ -171,14 +171,6 @@
       font-weight: 400;
     }
 
-    #slideshow-canvas {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      z-index: 200;
-      transition: opacity 0.8s ease;
-    }
-
     .waiting-overlay {
       position: fixed;
       inset: 0;
@@ -265,18 +257,6 @@
       </div>
     </div>
   </main>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-  <script src="sketch1.js"></script>
-  <script>
-    function showViewer() {
-      const cnv = document.getElementById('slideshow-canvas');
-      if (cnv) {
-        cnv.style.opacity = '0';
-        setTimeout(() => cnv.remove(), 800);
-      }
-    }
-  </script>
 
   <script type="module">
     /* ── FIREBASE ── */

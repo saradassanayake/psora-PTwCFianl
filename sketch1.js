@@ -27,8 +27,7 @@ let slide6Line2 = "Patient-centered technology that acknowledges this cycle can 
 
 // ─── SETUP ───────────────────────────────────────────────────
 function setup() {
-  let cnv = createCanvas(windowWidth, windowHeight);
-  cnv.id('slideshow-canvas');
+  createCanvas(windowWidth, windowHeight);
   slideStartTime = millis();
 }
 
@@ -194,8 +193,7 @@ function drawSlide7() {
   }
 
   if (millis() - slideStartTime >= 10000) {
-    noLoop();
-    if (typeof showViewer === 'function') showViewer();
+    window.location.href = "laptop-viewer.html";
   }
 }
 
