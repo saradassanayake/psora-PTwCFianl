@@ -28,6 +28,7 @@ let slide6Line2 = "Patient-centered technology that acknowledges this cycle can 
 // ─── SETUP ───────────────────────────────────────────────────
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  textFont('Satoshi');
   slideStartTime = millis();
 }
 
