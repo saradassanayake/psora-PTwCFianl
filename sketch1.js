@@ -107,6 +107,11 @@ function drawSlide4() {
 function drawSlide5() {
   background(255);
   document.getElementById('slide5Svg').style.display = 'block';
+  fill(180);
+  noStroke();
+  textAlign(LEFT, BOTTOM);
+  textSize(11);
+  text("Source: www.psoriasis.org/psoriasis-statistics/", 40, height - 24);
   if (millis() - slideStartTime >= 5000) {
     goToSlide(6);
   }
@@ -116,6 +121,11 @@ function drawSlide5() {
 function drawSlide6() {
   background(0);
   document.getElementById('slide6Svg').style.display = 'block';
+  fill(100);
+  noStroke();
+  textAlign(LEFT, BOTTOM);
+  textSize(11);
+  text("Source: www.psoriasis.org/psoriasis-statistics/", 40, height - 24);
   if (millis() - slideStartTime >= 5000) {
     goToSlide(7);
   }
@@ -127,7 +137,7 @@ function drawSlide7() {
   fill(255);
   noStroke();
   textAlign(CENTER, CENTER);
-  textSize(16);
+  textSize(20);
   text(
     "Current stress management tools often ask you to\nrate your stress from 1-5. Individuals with psoriatic\nconditions can't simply condense their stress into a\nnumber, given it shows up physically on their body.",
     width / 2,
@@ -135,7 +145,7 @@ function drawSlide7() {
   );
 
   if (millis() - slideStartTime >= 5000) {
-    textSize(18);
+    textSize(20);
     text("But what if they could...", width / 2, height / 2 + 80);
   }
 
