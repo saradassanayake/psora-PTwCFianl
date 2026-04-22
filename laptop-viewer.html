@@ -131,14 +131,7 @@
 
     .task-card { grid-column: 1 / -1; }
 
-    .task-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .task-card-header .card-label { margin-bottom: 0; }
+    .task-card-header { margin-bottom: 20px; }
 
     .task-group {
       display: flex;
@@ -263,8 +256,7 @@
 
     <div class="card task-card">
       <div class="task-card-header">
-        <div class="card-label">Task Planner</div>
-        <div class="card-label" id="suggestedLabel" style="display:none">Suggested Order:</div>
+        <div class="card-label" id="taskPlannerLabel">Task Planner</div>
       </div>
       <div id="taskList">
         <div class="task-group">
@@ -341,7 +333,7 @@
         diffInputs[i].value = tasks[i].diff || '';
       }
 
-      document.getElementById('suggestedLabel').style.display = 'block';
+      document.getElementById('taskPlannerLabel').textContent = 'Task Planner (Suggested Order)';
     }
 
     function clampDifficulty(input) {
