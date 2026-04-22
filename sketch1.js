@@ -18,12 +18,6 @@ let phrases = [
 
 let PHRASE_INTERVAL = 1000; //how fast each phrase is animated form the previous one
 
-// SLIDES 5 & 6 TEXT
-let slide5Line1 = "2% of the global population live with psoriasis";
-let slide5Line3 = "60% of people with psoriasis reported their disease to be a large problem in their everyday life.";
-
-let slide6Line1 = "The prevalence of psychological stress is higher in psoriatic patients than in the controls";
-let slide6Line2 = "The prevalence of depression can be as high as 74.6% in individuals with psoriasis";
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -112,21 +106,7 @@ function drawSlide4() {
 // ─── SLIDE 5: Stats ──────────────────────────────────────────
 function drawSlide5() {
   background(255);
-  fill(0);
-  noStroke();
-  textAlign(LEFT, TOP);
-  textSize(width * 0.016);
-
-  let margin = width * 0.27;
-  let maxW = width - margin * 2;
-  let lineH = (width * 0.016) * 1.6;
-  let y = height * 0.38;
-
-  text(slide5Line1, margin, y, maxW);
-  y += lineH * 2;
-  y += lineH * 4;
-  text(slide5Line3, margin, y, maxW);
-
+  document.getElementById('slide5Svg').style.display = 'block';
   if (millis() - slideStartTime >= 5000) {
     goToSlide(6);
   }
@@ -135,20 +115,7 @@ function drawSlide5() {
 // ─── SLIDE 6: Black bg text ─────────────────────────────────
 function drawSlide6() {
   background(0);
-  fill(255);
-  noStroke();
-  textAlign(LEFT, TOP);
-  textSize(width * 0.016);
-
-  let margin = width * 0.18;
-  let maxW = width - margin * 2;
-  let lineH = (width * 0.016) * 1.6;
-  let y = height * 0.38;
-
-  text(slide6Line1, margin, y, maxW);
-  y += lineH * 4;
-  text(slide6Line2, margin, y, maxW);
-
+  document.getElementById('slide6Svg').style.display = 'block';
   if (millis() - slideStartTime >= 5000) {
     goToSlide(7);
   }
@@ -181,8 +148,10 @@ function drawSlide7() {
 function goToSlide(n) {
   currentSlide = n;
   slideStartTime = millis();
-  var el = document.getElementById('defSvg');
-  if (el) el.style.display = 'none';
+  ['defSvg', 'slide5Svg', 'slide6Svg'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
 }
 
 function mousePressed() {
