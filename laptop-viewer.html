@@ -164,17 +164,20 @@
     .task-input::placeholder { color: var(--border); font-style: italic; }
 
     .difficulty-input {
-      width: 110px;
+      width: 130px;
       font-family: 'Satoshi', sans-serif;
       font-size: 13px;
       color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 6px 10px;
+      border: none;
       outline: none;
       background: transparent;
-      text-align: center;
+      text-align: right;
+      -moz-appearance: textfield;
+      appearance: textfield;
     }
+
+    .difficulty-input::-webkit-outer-spin-button,
+    .difficulty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
     .difficulty-input::placeholder { color: var(--border); font-style: italic; }
 
@@ -266,23 +269,23 @@
       <div id="taskList">
         <div class="task-group">
           <input class="task-input" type="text" placeholder="Click to type a task">
-          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Difficulty 1–5" onchange="clampDifficulty(this)">
+          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">
         </div>
         <div class="task-group">
           <input class="task-input" type="text" placeholder="Click to type a task">
-          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Difficulty 1–5" onchange="clampDifficulty(this)">
+          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">
         </div>
         <div class="task-group">
           <input class="task-input" type="text" placeholder="Click to type a task">
-          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Difficulty 1–5" onchange="clampDifficulty(this)">
+          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">
         </div>
         <div class="task-group">
           <input class="task-input" type="text" placeholder="Click to type a task">
-          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Difficulty 1–5" onchange="clampDifficulty(this)">
+          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">
         </div>
         <div class="task-group">
           <input class="task-input" type="text" placeholder="Click to type a task">
-          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Difficulty 1–5" onchange="clampDifficulty(this)">
+          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">
         </div>
       </div>
       <div class="task-card-footer">
