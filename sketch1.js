@@ -1,6 +1,5 @@
 let currentSlide = 1;
 let slideStartTime = 0;
-let defLines, defImg;
 
 // Assumptions for slide 2
 let phrases = [
@@ -26,17 +25,9 @@ let slide5Line3 = "60% of people with psoriasis reported their disease to be a l
 let slide6Line1 = "The prevalence of psychological stress is higher in psoriatic patients than in the controls";
 let slide6Line2 = "The prevalence of depression can be as high as 74.6% in individuals with psoriasis";
 
-function preload() {
-  defLines = loadStrings('Definition svg.svg');
-}
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textFont('Satoshi');
-
-  let blob = new Blob([defLines.join('\n')], { type: 'image/svg+xml' });
-  defImg = loadImage(URL.createObjectURL(blob));
-
   slideStartTime = millis(); //time
 }
 
@@ -112,13 +103,7 @@ function drawSlide3() {
 // Slide 4
 function drawSlide4() {
   background(255);
-  if (defImg && defImg.width > 0) {
-    let svgW = 732;
-    let svgH = 187;
-    let x = (width - svgW) / 2;
-    let y = (height - svgH) / 2;
-    image(defImg, x, y, svgW, svgH);
-  }
+  document.getElementById('defSvg').style.display = 'block';
   if (millis() - slideStartTime >= 5000) {
     goToSlide(5);
   }
@@ -196,6 +181,8 @@ function drawSlide7() {
 function goToSlide(n) {
   currentSlide = n;
   slideStartTime = millis();
+  var el = document.getElementById('defSvg');
+  if (el) el.style.display = 'none';
 }
 
 function mousePressed() {
