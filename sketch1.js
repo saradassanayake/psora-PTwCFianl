@@ -13,6 +13,7 @@ let phrases = [
   { text: '"Is that an infection?"',              px: 0.70, py: 0.66 },
   { text: '"That looks painful"',                 px: 0.40, py: 0.75 },
   { text: '"Is that a rash?"',                    px: 0.65, py: 0.87 },
+  { text: '"Are you bleeding?"',                  px: 0.35, py: 0.08 },
   { text: '"Do you have a skin disease?"',        px: 0.40, py: 0.55 },
 ];
 
