@@ -269,28 +269,7 @@
       <div class="task-card-header">
         <div class="card-label" id="taskPlannerLabel">Task Planner</div>
       </div>
-      <div id="taskList">
-        <div class="task-group">
-          <input class="task-input" type="text" placeholder="Click to type a task">
-          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">
-        </div>
-        <div class="task-group">
-          <input class="task-input" type="text" placeholder="Click to type a task">
-          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">
-        </div>
-        <div class="task-group">
-          <input class="task-input" type="text" placeholder="Click to type a task">
-          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">
-        </div>
-        <div class="task-group">
-          <input class="task-input" type="text" placeholder="Click to type a task">
-          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">
-        </div>
-        <div class="task-group">
-          <input class="task-input" type="text" placeholder="Click to type a task">
-          <input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">
-        </div>
-      </div>
+      <div id="taskList"></div>
       <div class="task-card-footer">
         <a class="ipad-link" href="https://saradassanayake.github.io/psora-PTwCFinal/" target="_blank">Open Interactive Input in a New Tab</a>
         <button id="psoraSort" onclick="psoraSort()">Psora Sort</button>
@@ -300,6 +279,17 @@
 
   <script>
     window.currentStressLevel = 0; //Default is 0 (since nothing is drawn yet)
+
+    // Build the 5 task rows — each row has a task text input and a difficulty number input
+    var taskList = document.getElementById('taskList');
+    for (var i = 0; i < 5; i++) {
+      var group = document.createElement('div');
+      group.className = 'task-group';
+      group.innerHTML =
+        '<input class="task-input" type="text" placeholder="Click to type a task">' +
+        '<input class="difficulty-input" type="number" min="1" max="5" placeholder="Input Difficulty 1-5" onchange="clampDifficulty(this)">';
+      taskList.appendChild(group);
+    }
 
     // Based on asking different llm models (claude, gemini, chatgpt) and referncing research on how stress should be managed:
     // 1 (little to no Stress)
